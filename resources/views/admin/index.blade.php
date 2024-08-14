@@ -1,13 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href={{ asset('bootstrap-5.2.3-dist/css/bootstrap.min.css') }}>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #2AA5FF;
+        }
+
+        input[type="date"] {
+            width: 11%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            background-color: white;
+            color: #333;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            outline: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        input[type="date"]:focus {
+            border-color: #0056b3;
+            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2);
+        }
+        .current-image {
+            max-width: 100px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
     <title>Jadwal</title>
 </head>
-<body style="background-color:#2AA5FF">
+
+<body>
     {{-- <nav class="navbar navbar-expand-lg bg-transparent p-3">
         <div class="container">
           <a href="#">
@@ -23,55 +58,62 @@
         </div>
       </nav> --}}
 
-      <div class="container mt-5">
+    <div class="container mt-5">
         <form action="/Jadwal" method="POST" enctype="multipart/form-data">
             @csrf
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingInput" placeholder="" name="judul">
-            <label for="floatingInput">Masukkan Nama</label>
-          </div>
-          <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingInput" placeholder="" name="deskripsi">
-            <label for="floatingInput">Masukkan Alamat</label>
-          </div>
-          <label for="waktu">waktu:</label>
-          <input type="date" id="waktu" name="waktu">
-          <br> <br>
-          <button class="btn btn-dark">Submit</button>
-          </form>
-      </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput" placeholder="" name="judul">
+                <label for="floatingInput">Masukkan Judul</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput" placeholder="" name="deskripsi">
+                <label for="floatingInput">Masukkan Deskripsi</label>
+            </div>
+            <input type="date" id="waktu" name="waktu">
+            <br> <br>
+            <button class="btn btn-light">Submit</button>
+        </form>
+    </div>
 
-      <div class="container mt-5">
+    <div class="container mt-5">
         <div>
-            <table class="table table-striped table-hover">
+            <table class="table">
                 <thead>
-                  <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Address</th>
-                    <th scope="col">Option</th>
-                  </tr>
+                    <tr>
+                        <th scope="col">Judul</th>
+                        <th scope="col">Deskripsi</th>
+                        <th scope="col">Tanggal</th>
+                        <th scope="col">Posisi</th>
+                        <th scope="col">Gambar</th>
+                        <th scope="col">Opsi</th>
+                    </tr>
                 </thead>
                 <tbody>
                     @foreach ($Jadwal as $Jadwals)
-                  <tr>
-                    <td>{{ $Jadwals->judul }}</td>
-                    <td>{{ $Jadwals->deskripsi }}</td>
-                    <td>{{ $Jadwals->waktu }}</td>
+                    <tr>
+                        <td>{{ $Jadwals->judul }}</td>
+                        <td>{{ $Jadwals->deskripsi }}</td>
+                        <td>{{ $Jadwals->waktu }}</td>
+                        <td> <div class="status-indicator
+                            {{ $Jadwals->active === 'active' ? 'status-active' : 'status-selesai' }}">
+                                {{ $Jadwals->active === 'active' ? 'Selesai' : 'Belum' }}
+                            </div></td>
+                            <td><img src="{{ asset('storage/' . $Jadwals->foto) }}" alt="Current Image" class="current-image"></td>
+                        <td>
+                            <button class="btn btn-light mb-3"><a href="{{ route('Jadwal.edit',$Jadwals->id) }}" style="text-decoration:none; color:black;">Edit</a></button>
 
-                    <td>
-                        <button class="btn btn-dark mb-3"><a href="{{ route('Jadwal.edit',$Jadwals->id) }}" style="text-decoration:none; color:white;">Edit</a></button>
-
-                        <form action="{{ route('Jadwal.destroy',$Jadwals->id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-dark mb-3" value="Delete">Delete</button>
-                        </form>
-                    </td>
-                  </tr>                  
-                  @endforeach
+                            <form action="{{ route('Jadwal.destroy',$Jadwals->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-light mb-3" value="Delete">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
                 </tbody>
-              </table>
+            </table>
         </div>
-      </div>
+    </div>
 </body>
+
 </html>

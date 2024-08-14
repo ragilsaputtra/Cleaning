@@ -53,6 +53,7 @@
             padding: 10px;
             background-color: #f0f0f0;
             border-radius: 5px;
+            cursor: pointer;
         }
 
         .calendar-day.selected {
@@ -74,14 +75,12 @@
     <div class="calendar-container">
         <div class="calendar-header">
             <span class="navigation" id="prevMonth">&lt;</span>
-            <h2 id="monthYear">July 2024</h2>
+            <h2 id="monthYear"></h2>
             <span class="navigation" id="nextMonth">&gt;</span>
         </div>
-        {{-- <a href="detail"> --}}
         <div class="calendar" id="calendar">
             <!-- Calendar days will be inserted here by JavaScript -->
         </div>
-        {{-- </a> --}}
     </div>
 
     <script>
@@ -99,8 +98,8 @@
             const lastDate = new Date(year, month + 1, 0).getDate();
 
             const months = [
-                'January', 'February', 'March', 'April', 'May', 'June',
-                'July', 'August', 'September', 'October', 'November', 'December'
+               'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+            'Juli', 'Agustus', 'September', 'October', 'November', 'Desember'
             ];
 
             monthYear.textContent = `${months[month]} ${year}`;
@@ -116,9 +115,17 @@
                 const day = document.createElement('div');
                 day.classList.add('calendar-day');
                 day.textContent = i;
-                if (i === 19) {
+                
+                // Menambahkan event listener untuk redirect ke route /detail
+                day.addEventListener('click', () => {
+                    window.location.href = `/detail`;
+                });
+                
+                // Menandai hari yang dipilih (misalnya tanggal saat ini)
+                if (i === new Date().getDate() && month === new Date().getMonth() && year === new Date().getFullYear()) {
                     day.classList.add('selected');
                 }
+
                 calendar.appendChild(day);
             }
         }

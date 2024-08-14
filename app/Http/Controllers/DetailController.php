@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Jadwal;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
-class JadwalController extends Controller
+class DetailController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,7 @@ class JadwalController extends Controller
     {
         $Jadwal = Jadwal::get();
 
-        return view('admin.index', compact('Jadwal'));
+        return view('detail', compact('Jadwal'));
     }
 
     /**
@@ -30,13 +31,7 @@ class JadwalController extends Controller
      */
     public function store(Request $request)
     {
-        Jadwal::create([
-            'judul' => $request->judul,
-            'deskripsi' => $request->deskripsi,
-            'waktu' => $request->waktu,
-        ]);
-
-        return to_route('Jadwal.index');
+        //
     }
 
     /**
@@ -54,7 +49,7 @@ class JadwalController extends Controller
     {
         $Jadwal = Jadwal::get();
 
-        return view('admin.edit',[
+        return view('form',[
             'Jadwal' => Jadwal::find($id)],
         compact('Jadwal'));
     }
@@ -66,13 +61,29 @@ class JadwalController extends Controller
     {
         $Jadwal = Jadwal::find($id);
 
-        $Jadwal->update([
-            'judul' => $request->judul,
-            'deskripsi' => $request->deskripsi,
-            'waktu' => $request->waktu,        
-        ]);
+    // Prepare update data
+    $updateData = [];
 
-        return to_route('Jadwal.index');
+    $updateData = ['active' => 'active'];
+
+    // Handle image upload if a new file is provided
+    if ($request->hasFile('foto')) {
+        // Delete the old file if it exists
+        if ($Jadwal->foto && Storage::exists($Jadwal->foto)) {
+            Storage::delete($Jadwal->foto);
+        }
+        
+        // Store the new file and update the path
+        $path = $request->file('foto')->store('images', 'public');
+        $updateData['foto'] = $path;
+    }
+
+    // Update the record with new data if there's anything to update
+    if (!empty($updateData)) {
+        $Jadwal->update($updateData);
+    }
+
+    return to_route('Detail.index');
     }
 
     /**
@@ -80,10 +91,6 @@ class JadwalController extends Controller
      */
     public function destroy(string $id)
     {
-        $Jadwal = Jadwal::find($id);
-
-        $Jadwal->delete();
-
-        return to_route('Jadwal.index');
+        //
     }
 }

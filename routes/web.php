@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DetailController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -23,9 +24,8 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/detail', function () {
-    return view('detail');
-})->middleware(['auth', 'verified'])->name('detail');
+Route::get('/detail', [DetailController::class, 'index'])->middleware(['auth', 'verified'])->name('detail');
+route::resource('Detail', DetailController::class);
 
 Route::get('/Jadwal', [JadwalController::class, 'index'])->middleware(['auth', 'verified'])->name('Jadwal');
 route::resource('Jadwal', JadwalController::class);
