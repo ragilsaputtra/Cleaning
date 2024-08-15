@@ -1,5 +1,3 @@
-<!-- resources/views/components/login-form.blade.php -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +6,7 @@
     <title>Telkom Schools Login</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             margin: 0;
@@ -59,6 +58,26 @@
             font-size: 14px;
         }
 
+        .show-password {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .show-password input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .show-password .toggle-icon {
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #333;
+        }
+
         .btn {
             width: 100%;
             background: #2AA5FF;
@@ -90,13 +109,24 @@
                 </div>
 
                 <h4 style="margin-right: 40ch">Password</h4>
-                <div class="textbox">
-                    <input type="password" placeholder="Password" name="password" required autocomplete="current-password">
+                <div class="textbox show-password">
+                    <input id="password" type="password" placeholder="Password" name="password" required autocomplete="current-password">
+                    <i id="togglePassword" class="fas fa-eye toggle-icon"></i>
                 </div>
 
                 <button type="submit" class="btn">MASUK</button>
             </form>
         </div>
     </div>
+
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            var passwordField = document.getElementById('password');
+            var type = passwordField.type === 'password' ? 'text' : 'password';
+            passwordField.type = type;
+            this.classList.toggle('fa-eye', type === 'password');
+            this.classList.toggle('fa-eye-slash', type === 'text');
+        });
+    </script>
 </body>
 </html>
